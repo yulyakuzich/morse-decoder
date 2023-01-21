@@ -37,8 +37,27 @@ const MORSE_TABLE = {
     '-----':  '0',
 };
 
+
 function decode(expr) {
-    // write your solution here
+    const morseArray = Object.keys(MORSE_TABLE);
+    const binaryValueArray = morseArray.map(el => {
+        const binRaw = '0000000000' + el
+            .split('')
+            .map(sym => sym === '-' ? '11' : '10')
+            .join('');
+        const bin = binRaw.slice(-10);
+        return {
+            binary: bin,
+            value: MORSE_TABLE[el],
+        }
+        }
+    )
+    const pattern = new RegExp(".{1," + 10 + "}", "ig");
+    let res = expr.match(pattern).map(item => item);
+    
+    return res
+        .map(bin => [{binary: '**********', value: ' '}, ...binaryValueArray].find(el => el.binary === bin).value)
+        .join('');
 }
 
 module.exports = {
